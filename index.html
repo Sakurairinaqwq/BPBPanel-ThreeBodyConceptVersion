@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Red Coast Base v4.11</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.0.3/misc/Farsi-Digits/Vazirmatn-FD-font-face.css" rel="stylesheet" type="text/css" />
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="toast-box"></div>
+
+    <div id="reboot-mask">
+        <div class="scan-line"></div>
+        <div class="reboot-text">
+            <i class="fas fa-microchip"></i>
+            <span id="reboot-msg">RECONFIGURING NEURAL LINK...</span>
+        </div>
+    </div>
+
+    <div id="dna-modal">
+        <div class="dna-content">
+            <h1 class="glitch-text" style="font-size: 4rem; margin-bottom: 20px;">WARNING</h1>
+            <div class="dna-msg">DO NOT ANSWER!</div>
+            <div class="dna-msg">不要回答！</div>
+            <div class="dna-msg">NE REPONDEZ PAS!</div>
+            <p style="margin-top: 30px; color: #fff; font-size: 1rem;">SOURCE DETECTED: TRISOLARIS</p>
+        </div>
+    </div>
+
+    <div id="countdown-overlay">
+        <i class="fas fa-eye fa-3x" style="color: var(--primary); margin-bottom: 20px; animation: pulse 1s infinite;"></i>
+        <div style="color: var(--text-dim); letter-spacing: 3px;" data-i18n="overlay_sophon">SOPHON INTERFERENCE</div>
+        <div class="big-count" id="countdown-timer">00:00:00</div>
+    </div>
+
+    <div id="login-page">
+        <div class="login-card">
+            <h1 class="glitch-text" style="font-family: var(--font-tech); font-size: 3rem; color: var(--primary); margin: 0;" data-i18n="app_title">RED COAST</h1>
+            <p style="color: var(--text-dim); letter-spacing: 2px; margin-top: 5px; margin-bottom: 30px;" data-i18n="login_subtitle">ETO NODE SYSTEM v4.11</p>
+            <div class="form-group">
+                <input type="password" id="login-pwd" class="input" style="text-align: center; font-size: 1.2rem; letter-spacing: 5px;" placeholder="ACCESS CODE">
+            </div>
+            <button class="btn btn-primary" style="width: 100%;" onclick="login()">
+                <span data-i18n="login_btn">INITIALIZE</span>
+            </button>
+            <p style="margin-top: 20px; font-size: 0.7rem; color: #333;" data-i18n="login_hint">WARNING: UNAUTHORIZED ACCESS IS PROHIBITED.</p>
+        </div>
+    </div>
+
+    <button id="menu-btn" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
+
+    <div id="app-container" style="display: flex; width: 100%; height: 100%; opacity: 0; transition: opacity 0.8s ease;">
+        
+        <aside class="sidebar" id="sidebar">
+            <div class="brand">
+                <i class="fas fa-satellite-dish"></i> <span data-i18n="app_title">RED COAST</span>
+            </div>
+            
+            <div class="nav-menu">
+                <div class="nav-item active" onclick="nav('dashboard', this)"><i class="fas fa-globe"></i> <span data-i18n="menu_dashboard">COMMAND CENTER</span></div>
+                <div class="nav-item" onclick="nav('protocols', this)"><i class="fas fa-network-wired"></i> <span data-i18n="menu_protocols">VECTORS & PORTS</span></div>
+                <div class="nav-item" onclick="nav('general', this)"><i class="fas fa-sliders-h"></i> <span data-i18n="menu_general">BASE SETTINGS</span></div>
+                <div class="nav-item" onclick="nav('fragment', this)"><i class="fas fa-atom"></i> <span data-i18n="menu_fragment">FRAGMENT (SOPHON)</span></div>
+                <div class="nav-item" onclick="nav('warp', this)"><i class="fas fa-wind"></i> <span data-i18n="menu_warp">CURVATURE DRIVE</span></div>
+                <div class="nav-item" onclick="nav('routing', this)"><i class="fas fa-random"></i> <span data-i18n="menu_routing">WALLFACER LOGIC</span></div>
+                <div class="nav-item" onclick="nav('chain', this)"><i class="fas fa-link"></i> <span data-i18n="menu_chain">RELAY CHAIN</span></div>
+                <div class="nav-item" onclick="nav('scanner', this)"><i class="fas fa-crosshairs"></i> <span data-i18n="menu_scanner">DARK FOREST SCAN</span></div>
+                <div class="nav-item" onclick="nav('kv', this)"><i class="fas fa-database"></i> <span data-i18n="menu_kv">MEMORY CORE</span></div>
+            </div>
+
+            <div class="music-section">
+                <div class="music-header">
+                    <i class="fas fa-wave-square"></i> <span data-i18n="music_title">BG_SIGNAL</span>
+                </div>
+                <canvas id="music-visualizer" width="220" height="50"></canvas>
+                
+                <div class="music-controls">
+                    <button id="music-toggle" class="btn-mini" onclick="audioDeck.toggle()">
+                        <i class="fas fa-play"></i>
+                    </button>
+                    <div class="volume-slider-container">
+                        <i class="fas fa-volume-down" style="font-size: 0.6rem; color: var(--text-dim);"></i>
+                        <input type="range" id="music-vol" min="0" max="1" step="0.05" value="0.4" oninput="audioDeck.setVolume(this.value)">
+                    </div>
+                </div>
+                <div class="music-track-name" id="track-name">WAITING FOR SIGNAL...</div>
+            </div>
+
+            <div class="user-section">
+                <div style="font-size: 0.8rem; color: var(--text-dim);"><span data-i18n="user_admin">COMMANDER</span>: <span style="color: var(--primary);">YE_WENJIE</span></div>
+                <div style="font-size: 0.7rem; color: var(--success);"><span data-i18n="user_online">STATUS: MONITORING</span></div>
+                <select id="lang-selector" class="input" style="margin-top: 10px; font-size: 0.7rem;" onchange="changeLanguage(this.value)">
+                    <option value="en">ENGLISH (UN)</option>
+                    <option value="zh">中文 (红岸)</option>
+                    <option value="ru">Русский (SU)</option>
+                    <option value="fa">فارسی (IR)</option>
+                </select>
+            </div>
+        </aside>
+
+        <div class="main-content">
+            
+            <div id="dashboard" class="page-section active">
+                <div class="page-header">
+                    <div>
+                        <div class="page-title" data-i18n="menu_dashboard">COMMAND CENTER</div>
+                        <div class="page-subtitle" data-i18n="dashboard_desc">SITUATION AWARENESS & STATUS</div>
+                    </div>
+                    <button class="btn btn-primary" onclick="refreshStatus()"><i class="fas fa-sync"></i> <span data-i18n="btn_refresh_ip">PING</span></button>
+                </div>
+
+                <div class="grid-3">
+                    <div class="card">
+                        <div class="card-header" data-i18n="card_ip_title">CURRENT COORDINATES</div>
+                        <h2 class="glitch-text" style="font-family: var(--font-tech); font-size: 2rem; color: var(--text-main);" id="dash-ip">UNKNOWN</h2>
+                        <div style="color: var(--text-dim); font-size: 0.8rem;" id="dash-loc" data-i18n="status_checking">CALCULATING...</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header" data-i18n="card_status_title">SYSTEM LOAD</div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                            <span class="label" data-i18n="label_cpu">CPU INTEGRITY</span> <span style="color: var(--success);">98.4%</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span class="label" data-i18n="label_requests">INCOMING SIGNALS</span> <span>24,102</span>
+                        </div>
+                    </div>
+                    <div class="card" style="border-color: var(--accent);">
+                        <div class="card-header" style="color: var(--accent);" data-i18n="card_ai_title">SOPHON BLIND ZONE</div>
+                        <p style="font-size: 0.8rem; color: var(--text-dim); margin-bottom: 15px;" data-i18n="card_ai_desc">
+                            Deploy random noise to confuse surveillance.
+                        </p>
+                        <button class="btn btn-accent" style="width: 100%;" onclick="deploySophonShield()"><span data-i18n="btn_run_obfuscate">DEPLOY SHIELD</span></button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header" data-i18n="card_actions_title">QUICK DEPLOYMENT</div>
+                    <div class="grid-2">
+                        <button class="btn" onclick="copyKey()"><i class="fas fa-key"></i> <span data-i18n="btn_copy_sub">COPY ACCESS KEY</span></button>
+                        <button class="btn" onclick="exportConfig()"><i class="fas fa-file-code"></i> <span data-i18n="btn_export_clash">EXPORT CONFIG</span></button>
+                    </div>
+                </div>
+
+                <div class="card" style="border-color: #7f1d1d;">
+                    <div class="card-header" style="color: var(--primary);">STRATEGIC BROADCAST</div>
+                    <div class="grid-2" style="align-items: center;">
+                        <div style="font-size: 0.8rem; color: var(--text-dim);">
+                            WARNING: HIGH POWER TRANSMISSION.<br>SOLAR AMPLIFICATION ENABLED.
+                        </div>
+                        <button class="btn btn-danger" id="broadcast-btn" onclick="triggerEasterEgg()">
+                            <i class="fas fa-bullhorn"></i> REQUEST BROADCAST
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="protocols" class="page-section">
+                <div class="page-header">
+                    <div class="page-title" data-i18n="menu_protocols">COMM VECTORS</div>
+                    <div class="page-subtitle">PROTOCOL SELECTION & PORT MAPPING</div>
+                </div>
+                <div class="card">
+                    <div class="card-header" data-i18n="card_enabled_protocols">ACTIVE VECTORS</div>
+                    <div class="grid-2">
+                        <div class="toggle-row">
+                            <span data-i18n="toggle_vless">VLESS VECTOR</span>
+                            <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+                        </div>
+                        <div class="toggle-row">
+                            <span data-i18n="toggle_trojan">TROJAN HORSE</span>
+                            <label class="switch"><input type="checkbox"><span class="slider"></span></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="grid-2">
+                    <div class="card">
+                        <div class="card-header" data-i18n="desc_tls_ports">SECURE PORTS (TLS)</div>
+                        <div class="grid-4" id="tls-ports"></div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header" data-i18n="desc_http_ports">OPEN PORTS (HTTP)</div>
+                        <div class="grid-4" id="http-ports"></div>
+                    </div>
+                </div>
+                <button class="btn btn-primary" style="float: right;" onclick="save()"><span data-i18n="btn_save">COMMIT CHANGES</span></button>
+            </div>
+
+            <div id="general" class="page-section">
+                <div class="page-header">
+                    <div class="page-title" data-i18n="menu_general">BASE PARAMETERS</div>
+                    <div class="page-subtitle">DNS & NETWORK TOPOLOGY</div>
+                </div>
+                <div class="grid-2">
+                    <div class="card">
+                        <div class="card-header" data-i18n="card_dns">DNS RESOLUTION</div>
+                        <div class="form-group">
+                            <span class="label" data-i18n="label_remote_dns">REMOTE DNS (DoH)</span>
+                            <input type="text" class="input" value="https://8.8.8.8/dns-query">
+                        </div>
+                        <div class="form-group">
+                            <span class="label" data-i18n="label_local_dns">LOCAL DNS</span>
+                            <input type="text" class="input" value="8.8.8.8">
+                        </div>
+                        <div class="toggle-row">
+                            <span data-i18n="toggle_fakedns">FAKE DNS MASK</span>
+                            <label class="switch"><input type="checkbox"><span class="slider"></span></label>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header" data-i18n="card_network">NETWORK</div>
+                        <div class="form-group">
+                            <span class="label" data-i18n="label_proxy_ip">CLEAN IP (JUMP POINT)</span>
+                            <input type="text" class="input" id="general-proxy-ip" value="www.visa.com.sg">
+                        </div>
+                        <div class="toggle-row">
+                            <span data-i18n="toggle_ipv6">IPv6 SUPPORT</span>
+                            <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+                        </div>
+                        <div class="toggle-row">
+                            <span data-i18n="toggle_ech">ECH (ENCRYPTED HELLO)</span>
+                            <label class="switch"><input type="checkbox"><span class="slider"></span></label>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn-primary" style="float: right; margin-top: 20px;" onclick="save()"><span data-i18n="btn_save">COMMIT CHANGES</span></button>
+            </div>
+
+            <div id="fragment" class="page-section">
+                <div class="page-header">
+                    <div class="page-title" data-i18n="menu_fragment">SOPHON FRAGMENT</div>
+                    <div class="page-subtitle">PACKET SLICING TECHNOLOGY</div>
+                </div>
+                <div class="card">
+                    <div class="grid-3">
+                        <div class="form-group">
+                            <span class="label" data-i18n="label_length">LENGTH (MIN-MAX)</span>
+                            <div style="display: flex; gap: 10px;">
+                                <input type="number" class="input" value="100">
+                                <input type="number" class="input" value="200">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <span class="label" data-i18n="label_interval">INTERVAL (MS)</span>
+                            <div style="display: flex; gap: 10px;">
+                                <input type="number" class="input" value="10">
+                                <input type="number" class="input" value="20">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <span class="label" data-i18n="label_packets">PACKET TYPE</span>
+                            <select class="input">
+                                <option>tlshello</option>
+                                <option>1-1</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn-primary" style="float: right;" onclick="save()"><span data-i18n="btn_save">COMMIT CHANGES</span></button>
+            </div>
+
+            <div id="warp" class="page-section">
+                <div class="page-header">
+                    <div class="page-title" data-i18n="menu_warp">CURVATURE DRIVE</div>
+                    <div class="page-subtitle">WARP & NOISE</div>
+                </div>
+                <div class="grid-2">
+                    <div class="card">
+                        <div class="card-header" data-i18n="card_warp_account">DRIVE ACCOUNT</div>
+                        <div class="form-group">
+                            <span class="label" data-i18n="label_warp_key">LICENSE KEY</span>
+                            <input type="text" class="input" placeholder="xxxxxxxx-xxxxxxxx-xxxxxxxx">
+                        </div>
+                        <div class="form-group">
+                            <span class="label" data-i18n="label_warp_endpoint">ENDPOINT</span>
+                            <input type="text" class="input" value="engage.cloudflareclient.com:2408">
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header" data-i18n="card_warp_pro">NOISE INJECTION</div>
+                        <div class="form-group">
+                            <span class="label" data-i18n="label_noise_mode">UDP NOISE</span>
+                            <select class="input">
+                                <option>quic</option>
+                                <option>random</option>
+                                <option>disabled</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <span class="label" data-i18n="label_noise_apply">APPLY TO</span>
+                            <select class="input">
+                                <option>udp</option>
+                                <option>tcp</option>
+                                <option>all</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn-primary" style="float: right; margin-top: 20px;" onclick="save()"><span data-i18n="btn_save">COMMIT CHANGES</span></button>
+            </div>
+
+            <div id="routing" class="page-section">
+                <div class="page-header">
+                    <div class="page-title" data-i18n="menu_routing">WALLFACER LOGIC</div>
+                    <div class="page-subtitle">TRAFFIC RULES</div>
+                </div>
+                <div class="card">
+                    <div class="grid-2">
+                        <div class="toggle-row"><span data-i18n="toggle_ads">BLOCK ADS</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+                        <div class="toggle-row"><span data-i18n="toggle_quic">BLOCK QUIC</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+                        <div class="toggle-row"><span data-i18n="toggle_cn">BYPASS CN</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+                        <div class="toggle-row"><span data-i18n="toggle_google_ai">BYPASS GOOGLE AI</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header" data-i18n="card_custom_rules">CUSTOM VECTORS</div>
+                    <div class="form-group"><span class="label" data-i18n="label_custom_bypass">BYPASS LIST</span><textarea class="input" rows="3"></textarea></div>
+                    <div class="form-group"><span class="label" data-i18n="label_custom_block">BLOCK LIST</span><textarea class="input" rows="3"></textarea></div>
+                </div>
+                <button class="btn btn-primary" style="float: right;" onclick="save()"><span data-i18n="btn_save">COMMIT CHANGES</span></button>
+            </div>
+
+            <div id="chain" class="page-section">
+                <div class="page-header">
+                    <div class="page-title" data-i18n="menu_chain">RELAY CHAIN</div>
+                </div>
+                <div class="card">
+                    <div class="toggle-row">
+                        <span data-i18n="toggle_enable_chain">ENABLE CHAIN PROXY</span>
+                        <label class="switch"><input type="checkbox" id="chain-toggle" onchange="toggleChain()"><span class="slider"></span></label>
+                    </div>
+                    <div id="chain-options" style="display: none; margin-top: 20px;">
+                        <div class="grid-3">
+                            <div class="form-group"><span class="label" data-i18n="label_protocol">PROTOCOL</span><select class="input"><option>socks5</option><option>http</option></select></div>
+                            <div class="form-group"><span class="label" data-i18n="label_server">SERVER</span><input type="text" class="input"></div>
+                            <div class="form-group"><span class="label" data-i18n="label_port">PORT</span><input type="number" class="input"></div>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn-primary" style="float: right;" onclick="save()"><span data-i18n="btn_save">COMMIT CHANGES</span></button>
+            </div>
+
+            <div id="scanner" class="page-section">
+                <div class="page-header">
+                    <div class="page-title" data-i18n="menu_scanner">DARK FOREST SCAN</div>
+                    <div class="page-subtitle">FIND SAFE COORDINATES</div>
+                </div>
+                <div class="grid-2">
+                    <div class="card">
+                        <div class="card-header">SCAN PARAMETERS</div>
+                        <div class="form-group"><span class="label" data-i18n="label_max_latency">MAX LATENCY</span><input type="number" class="input" value="300"></div>
+                        <div class="form-group"><span class="label" data-i18n="label_scan_threads">THREADS</span><input type="number" class="input" value="5"></div>
+                        <div class="toggle-row">
+                            <span data-i18n="toggle_auto_apply">AUTO-LOCK BEST</span>
+                            <label class="switch"><input type="checkbox" checked id="auto-apply-scan"><span class="slider"></span></label>
+                        </div>
+                        <button class="btn btn-primary" style="width: 100%; margin-top: 20px;" onclick="startScan(this)">
+                            <i class="fas fa-crosshairs"></i> <span data-i18n="btn_start_scan">INITIATE SCAN</span>
+                        </button>
+                    </div>
+                    <div class="card">
+                        <div class="card-header" data-i18n="card_scan_log">SCAN LOGS</div>
+                        <div class="terminal" id="scan-log"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="kv" class="page-section">
+                <div class="page-header">
+                    <div class="page-title" data-i18n="menu_kv">MEMORY CORE</div>
+                    <div class="page-subtitle">DIRECT DATABASE ACCESS</div>
+                </div>
+                <div class="card">
+                    <textarea class="input" style="height: 400px; font-family: monospace; color: var(--success);">
+{
+  "settings": {
+    "vless": true,
+    "trojan": false,
+    "uuid": "550e8400-e29b-41d4-a716-446655440000"
+  }
+}
+                    </textarea>
+                    <div style="margin-top: 15px; text-align: right;">
+                        <button class="btn btn-danger" onclick="toast(translations[currentLang].msg_kv_warn || 'WARNING!', 'warning')"><span data-i18n="btn_force_write">FORCE WRITE</span></button>
+                    </div>
+                </div>
+            </div>
+
+        </div> </div> <script src="script.js"></script>
+</body>
+</html>
