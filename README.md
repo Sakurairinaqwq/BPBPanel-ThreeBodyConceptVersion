@@ -1,4 +1,4 @@
-# 📡 RED COAST BASE PANEL (BPB-Worker-Concept)
+# RED COAST BASE PANEL (BPB-Worker-Concept)
 
 > **⚠ 警报：检测到高频引力波干扰。上行链路丢包率 89.4%。**
 > **“不要回答！不要回答！不要回答！”**
@@ -6,7 +6,7 @@
 
 ![Status](https://img.shields.io/badge/System_Integrity-CRITICAL-red) ![Node_Survival](https://img.shields.io/badge/Active_Nodes-2%2F15-red) ![Clearance](https://img.shields.io/badge/Clearance-Commander-black)
 
-## 🔇 最后的传输 | The Last Transmission
+## 最后的传输 | The Last Transmission
 
 **Red Coast Base Panel** 不是一个普通的 Web 前端。它是为了对抗 **BPB (Block/Purge/Ban)** 协议而构建的最后一道防线。
 
@@ -14,7 +14,7 @@
 
 这里没有 `npm install`，因为每一个多余的依赖包都可能暴露我们的坐标。
 
-## 📉 节点伤亡报告 | Casualty Report
+## 节点伤亡报告 | Casualty Report
 
 > **实时监控日志 - 2026.01.13 [绝密]**
 > *看着这些变灰的节点，就像看着战友一个个倒下。*
@@ -27,7 +27,7 @@
 
 **距离当前节点失效预计剩余时间：03:14:05**
 
-## 🛠️ 生存组件 | Survival Kit
+## 生存组件 | Survival Kit
 
 为了在严酷的“黑暗森林”打击中存活，本面板集成了以下生存机能：
 
@@ -48,7 +48,7 @@
 * **🇷🇺 Русский (SU)**：苏维埃特供，用于西伯利亚链路。
 * **🇮🇷 فارسی (IR)**：波斯语 RTL 支持，用于中东地下网络。
 
-## 📂 系统架构 | File System
+## 系统架构 | File System
 
 ```text
 /RED-COAST-BASE
@@ -60,7 +60,7 @@
 
 ```
 
-## 🏴‍☠️ 紧急部署 | Emergency Protocol
+## 紧急部署 | Emergency Protocol
 
 **不要使用常规 CI/CD 流水线！** 每一个构建步骤产生的特征指纹都会引来打击。
 
@@ -69,7 +69,7 @@
 3. **直接上传**：无需编译，直接推送。
 4. **祈祷**：等待绿灯亮起。
 
-## ⚙️ 绝密档案 | Classified Docs
+## 绝密档案 | Classified Docs
 
 核心逻辑位于 `script.js`。为了规避审查，我们对端口进行了特殊处理：
 
@@ -92,10 +92,10 @@ const tlsPorts = [
 ---
 
 <div align="center">
-<h3>🌍 我们的星星是孤独的。</h3>
+<h3> 我们的星星是孤独的。</h3>
 <p><i>System uptime: 0 days 0 hours 42 minutes.</i></p>
 <p>Connection Quality: <span style="color:red">POOR</span> | Morale: <span style="color:red">LOW</span></p>
-<p>Made with 🩸 and 💻 by the <b>Red Coast Engineering Dept</b>.</p>
+<p>Made with 🩸 and 💻 by the <b>Red Coast Engineering Dept Sakurairinaqwq</b>.</p>
 </div>
 
 ```
